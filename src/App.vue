@@ -1,22 +1,23 @@
 <template>
   <div class="app">
     <h1>Страница с постами</h1>
-    <my-button
-      class="btn_show-dialog"
-      @click="showDialog"
-    >
-      Создать пост
-    </my-button>
+    <div class="app__btns-wrapper">
+      <my-button @click="fetchPosts">Загрузить посты</my-button>
+      <my-button class="btn_show-dialog" @click="showDialog">
+        Создать пост
+      </my-button>
+    </div>
     <my-dialog v-model:show="dialogVisible">
       <post-form @create="createPost" />
     </my-dialog>
-    <post-list :posts="posts" @remove="removePost"/>
+    <post-list :posts="posts" @remove="removePost" />
   </div>
 </template>
 
 <script>
 import PostForm from "@/components/PostForm";
 import PostList from "@/components/PostList";
+import axios from "axios";
 
 export default {
   components: {
@@ -25,13 +26,8 @@ export default {
   },
   data() {
     return {
-      posts: [
-        { id: 1, title: "JavaScript 1", body: "Описание поста 1" },
-        { id: 2, title: "JavaScript 2", body: "Описание поста 2" },
-        { id: 3, title: "JavaScript 3", body: "Описание поста 3" },
-        { id: 4, title: "JavaScript 4", body: "Описание поста 4" },
-      ],
-      dialogVisible: false
+      posts: [],
+      dialogVisible: false,
     };
   },
   methods: {
@@ -40,11 +36,21 @@ export default {
       this.dialogVisible = false;
     },
     removePost(post) {
-      this.posts = this.posts.filter(nextPost => nextPost.id !== post.id)
+      this.posts = this.posts.filter((nextPost) => nextPost.id !== post.id);
     },
     showDialog() {
       this.dialogVisible = true;
-    }
+    },
+    async fetchPosts() {
+      try {
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts?_limit=10"
+        );
+        this.posts = response.data;
+      } catch (e) {
+        alert("Во время получения данных о постах произошла ошибка!");
+      }
+    },
   },
 };
 </script>
@@ -58,7 +64,9 @@ export default {
 .app {
   padding: 20px;
 }
-.btn_show-dialog {
+.app__btns-wrapper {
   margin: 15px 0;
+  display: flex;
+  column-gap: 10px;
 }
 </style>
