@@ -3,6 +3,7 @@
     <h1>Страница с постами</h1>
     <div class="app__btns-wrapper">
       <my-button @click="showDialog"> Создать пост </my-button>
+      <my-select v-model="selectedSort" :options="sortOptions" />
     </div>
     <my-dialog v-model:show="dialogVisible">
       <post-form @create="createPost" />
@@ -27,6 +28,11 @@ export default {
       posts: [],
       dialogVisible: false,
       arePostsLoading: false,
+      selectedSort: "",
+      sortOptions: [
+        { value: "title", name: "По названию" },
+        { value: "body", name: "По содержимому" },
+      ],
     };
   },
   methods: {
@@ -72,7 +78,7 @@ export default {
 .app__btns-wrapper {
   margin: 15px 0;
   display: flex;
-  column-gap: 10px;
+  justify-content: space-between;
 }
 .app__loading-label {
   font-size: 18px;
