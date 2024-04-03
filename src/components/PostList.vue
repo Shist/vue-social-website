@@ -43,4 +43,7 @@ export default {
   opacity: 0;
   transform: translateX(130px);
 }
+.posts-list-move {
+  transition: transform 0.4s ease;
+}
 </style>
