@@ -1,6 +1,7 @@
 <template>
   <div class="post">
     <div>
+      <div><strong>ID:</strong> {{ post.id }}</div>
       <div><strong>Название:</strong> {{ post.title }}</div>
       <div><strong>Описание:</strong> {{ post.body }}</div>
     </div>
@@ -29,5 +30,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  column-gap: 10px;
 }
 </style>
