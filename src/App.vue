@@ -19,7 +19,9 @@
       v-if="!arePostsLoading"
     />
     <span class="app__loading-label" v-else>Идёт загрузка постов...</span>
-    <div class="app__page-wrapper">
+    <div ref="observer" class="observer"></div>
+    <!-- This code is needed for variant of pagination with pages -->
+    <!-- <div class="app__page-wrapper">
       <button
         v-for="pageNumber in totalPages"
         :key="pageNumber"
@@ -31,7 +33,7 @@
       >
         {{ pageNumber }}
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -72,9 +74,10 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
-    changePage(pageNumber) {
-      this.page = pageNumber;
-    },
+    // This code is needed for variant of pagination with pages
+    // changePage(pageNumber) {
+    //   this.page = pageNumber;
+    // },
     async fetchPosts() {
       try {
         this.arePostsLoading = true;
@@ -97,9 +100,40 @@ export default {
         this.arePostsLoading = false;
       }
     },
+    async loadMorePosts() {
+      try {
+        this.page += 1;
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            },
+          }
+        );
+        this.totalPages = Math.ceil(
+          response.headers["x-total-count"] / this.limit
+        );
+        this.posts = [...this.posts, ...response.data];
+      } catch (e) {
+        alert("Во время получения данных о постах произошла ошибка!");
+      }
+    },
   },
   mounted() {
     this.fetchPosts();
+    const options = {
+      rottMargin: "0px",
+      threshold: 1.0,
+    };
+    const callback = (entries, observer) => {
+      if (entries[0].isIntersecting && this.page < this.totalPages) {
+        this.loadMorePosts();
+      }
+    };
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer);
   },
   computed: {
     sortedPosts() {
@@ -118,9 +152,10 @@ export default {
     },
   },
   watch: {
-    page() {
-      this.fetchPosts();
-    },
+    // This code is needed for variant of pagination with pages
+    // page() {
+    //   this.fetchPosts();
+    // },
   },
 };
 </script>
@@ -148,7 +183,8 @@ export default {
 .app__loading-label {
   font-size: 18px;
 }
-.app__page-wrapper {
+/* This code is needed for variant of pagination with pages */
+/* .app__page-wrapper {
   display: flex;
   column-gap: 7px;
   margin-top: 15px;
@@ -162,5 +198,8 @@ export default {
 }
 .page_current {
   border: 3px solid teal;
+} */
+.observer {
+  height: 10px;
 }
 </style>
