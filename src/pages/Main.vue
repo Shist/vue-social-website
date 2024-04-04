@@ -1,6 +1,11 @@
 <template>
   <div>
-    <h1>Добро пожаловать на курс по Vue 3</h1>
+    <h1 class="main-headline">Добро пожаловать на главную страницу</h1>
+    <h2>
+      Этот сайт представляет собой небольшую социальную сеть, где пользователя
+      могут просматривать и оставлять посты. Он написан с использованием
+      технологии Vue 3.
+    </h2>
   </div>
 </template>
 
@@ -8,4 +13,8 @@
 export default {};
 </script>
 
-<style scoped></style>
+<style scoped>
+.main-headline {
+  margin-bottom: 20px;
+}
+</style>
