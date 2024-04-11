@@ -5,6 +5,7 @@
       class="app__search-input"
       v-model="searchQuery"
       placeholder="Искать пост по названию..."
+      v-focus
     />
     <div class="app__btns-wrapper">
       <my-button @click="showDialog"> Создать пост </my-button>
@@ -19,7 +20,7 @@
       v-if="!arePostsLoading"
     />
     <span class="app__loading-label" v-else>Идёт загрузка постов...</span>
-    <div ref="observer" class="observer"></div>
+    <div v-intersection="loadMorePosts" class="observer"></div>
     <!-- This code is needed for variant of pagination with pages -->
     <!-- <div class="app__page-wrapper">
         <button
@@ -123,17 +124,6 @@ export default {
   },
   mounted() {
     this.fetchPosts();
-    const options = {
-      rottMargin: "0px",
-      threshold: 1.0,
-    };
-    const callback = (entries, observer) => {
-      if (entries[0].isIntersecting && this.page < this.totalPages) {
-        this.loadMorePosts();
-      }
-    };
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(this.$refs.observer);
   },
   computed: {
     sortedPosts() {

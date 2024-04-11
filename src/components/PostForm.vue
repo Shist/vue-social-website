@@ -6,6 +6,7 @@
       class="input_form"
       type="text"
       placeholder="Название"
+      v-focus
     />
     <my-input
       v-model="post.body"
