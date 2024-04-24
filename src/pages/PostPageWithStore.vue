@@ -3,7 +3,6 @@
     <h1 class="app__headline">Страница с постами</h1>
     <my-input
       class="app__search-input"
-      v-model="searchQuery"
       :model-value="searchQuery"
       @update:model-value="setSearchQuery"
       placeholder="Искать пост по названию..."
